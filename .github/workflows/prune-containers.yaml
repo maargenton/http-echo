@@ -1,0 +1,35 @@
+name: prune-containers
+
+on:
+  # push:
+  workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '1 1 1 * *' # monthly on 1st day of the month at 01:01:00
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prune untagged default
+        uses: vlaurin/action-ghcr-prune@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          organization: ${{ env.GITHUB_REPOSITORY_OWNER }}
+          container: http-echo
+          dry-run: true
+          tag-regex: '^(v\d+.\d+.\d+-(?:master|main|rc)).(\d+)'
+          # older-than: 30 # days
+          # keep-last: 10
+          untagged: true
+      - name: Prune branches
+        uses: vlaurin/action-ghcr-prune@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          organization: ${{ env.GITHUB_REPOSITORY_OWNER }}
+          container: http-echo
+          dry-run: true
+          tag-regex: '^(v\d+.\d+.\d+-(?!(?:master|main|rc))[^.]*).(\d+)'
+          # older-than: 30 # days
+          # keep-last: 10
+          untagged: true
