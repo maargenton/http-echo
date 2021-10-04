@@ -304,10 +304,10 @@ def github_registry_tag(base_tag)
     end
     # Authenticate
     puts "Authenticating with docker.pkg.github.com..."
-    system("echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com --username ${GITHUB_ACTOR} --password-stdin")
+    system("echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_ACTOR} --password-stdin")
     puts "Failed to authenticate with docker.pkg.github.com" if $?.exitstatus != 0
 
-    return File.join('docker.pkg.github.com', ENV['GITHUB_REPOSITORY'], base_tag)
+    return File.join('ghcr.io', ENV['GITHUB_REPOSITORY_OWNER'], base_tag)
 end
 
 
