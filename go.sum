@@ -9,6 +9,7 @@ github.com/maargenton/go-fileutils v0.6.1/go.mod h1:ve/fUYuYom3GIQwXb83RcyvpnnQm
 github.com/maargenton/go-testpredicate v0.4.4/go.mod h1:sn267JpJ65uvLQ7VtYzPLvXQiw0tHHw+KbCFzxRPOww=
 github.com/maargenton/go-testpredicate v0.6.4/go.mod h1:lUPR99Ipl1o49oRb5wEUwb/7KXrwc1FAVR6aZmCmoS8=
 github.com/maargenton/go-testpredicate v1.0.0/go.mod h1:ZscqHa6PT35rm0psZd9y1KV6ygPL1C5NfDFBDFTkGu8=
+github.com/maargenton/go-testpredicate v1.1.1 h1:P2xNfWefT+z/TkaHxXrOT9TtCn59/Wi/B2zxMsgLipU=
 github.com/maargenton/go-testpredicate v1.1.1/go.mod h1:ZscqHa6PT35rm0psZd9y1KV6ygPL1C5NfDFBDFTkGu8=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
