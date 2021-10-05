@@ -1,12 +1,16 @@
 package main
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
+	"time"
 
 	"github.com/maargenton/go-cli"
 	"github.com/maargenton/http-echo/pkg/buildinfo"
@@ -44,6 +48,30 @@ func (s *httpEchoServer) Run() error {
 
 func (s *httpEchoServer) handler() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+
+		// Handle delay
+		var delay = 0 * time.Second
+		if q.Has("delay") {
+			v, err := time.ParseDuration(q.Get("delay"))
+			if err == nil {
+				delay = v
+			}
+		}
+		if delay > 0 {
+			time.Sleep(delay)
+		}
+
+		// Handle status
+		var status = 200
+		if q.Has("status") {
+			v, err := strconv.ParseInt(q.Get("status"), 10, 0)
+			if err == nil {
+				status = int(v)
+			}
+		}
+		w.WriteHeader(status)
+
 		dump, err := httputil.DumpRequest(r, false)
 		if err != nil {
 			http.Error(w, fmt.Sprint(err), http.StatusInternalServerError)
@@ -67,6 +95,23 @@ func (s *httpEchoServer) handler() func(w http.ResponseWriter, r *http.Request) 
 			for _, e := range env {
 				fmt.Fprintf(w, "%v\n", e)
 			}
+			fmt.Fprintf(w, "--------------------\n")
+		}
+
+		// Handle payload
+		var payload = 0
+		if q.Has("payload") {
+			v, err := strconv.ParseInt(q.Get("payload"), 10, 0)
+			if err == nil {
+				payload = int(v)
+			}
+		}
+		if payload > 0 {
+			data := make([]byte, payload)
+			rand.Read(data)
+			fmt.Fprintf(w, "\nPayload:\n")
+			fmt.Fprintf(w, "--------------------\n")
+			fmt.Fprintln(w, base64.StdEncoding.EncodeToString(data))
 			fmt.Fprintf(w, "--------------------\n")
 		}
 	}

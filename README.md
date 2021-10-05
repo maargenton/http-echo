@@ -7,7 +7,7 @@ to help setup and debug reverse proxies and ingress configurations.
 
 To start a local server
 ```
-go run ./cmd/http-echo --port 8080 --env
+go run ./cmd/http-echo --service-port :8080 --env
 ```
 
 To run from a prebuilt docker image
@@ -28,7 +28,11 @@ curl -v http://localhost:8080/foo/bar?payload=1KB&delay=1s
 The server responds to any sub-path and support a few query parameters:
 
 - `delay=<duration>` : delay the response by the specified duration
-- `payload=<size><unit>` : add random payload with the requested size to the
-  response.
+- `payload=<size>` : add random payload with the requested size to the response.
+  The additional payload of the given size is added to the response as a base 64
+  encoded string, so the overall content length of the response will be larger
+  than the requested value
 - `status=<code>` : Specify status code to respond with, instead of 200
+
+Planned:
 - `ws` : promote the connection t oa websocket echo server.

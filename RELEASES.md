@@ -1,9 +1,3 @@
-# v0.0.1
+# v0.1.0
 
-Overview
-
-## Main Features
-
-## Improvements
-
-## Fixes
+First release of http-echo server

@@ -1,3 +1,11 @@
 
-### zen
-GET http://localhost:8080/foo/bar
+@port=8080
+
+###
+GET http://localhost:{{port}}/
+
+###
+GET http://localhost:{{port}}/foo/bar?delay=3s&payload=1024&status=404
+
+###
+GET http://localhost:{{port}}/foo/bar?delay=300ms&payload=10240
