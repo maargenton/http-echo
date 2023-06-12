@@ -1,0 +1,78 @@
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: http-echo
+  name: http-echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-echo
+  template:
+    metadata:
+      labels:
+        app: http-echo
+    spec:
+      containers:
+        - image: ghcr.io/maargenton/http-echo:v0.1.0
+          name: http-echo
+          args:
+            - --env
+          env:
+            - name: FOO
+              value: bar
+          ports:
+            - name: service
+              containerPort: 8080
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: http-echo
+  name: http-echo
+spec:
+  ports:
+    - name: service
+      port: 80
+      targetPort: service
+  selector:
+    app: http-echo
+  type: ClusterIP
+
+---
+# Ingress Middleware
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: http-echo-prefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /echo
+
+---
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: http-echo
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: >-
+      default-http-echo-prefix@kubernetescrd
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /echo
+            pathType: Prefix
+            backend:
+              service:
+                name: http-echo
+                port:
+                  name: service
